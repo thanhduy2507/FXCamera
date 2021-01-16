@@ -1,0 +1,51 @@
+﻿@model IEnumerable<FXCamera.Models.User>
+@{
+    ViewBag.Title = "Trash";
+    Layout = "~/Areas/Administrator/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-12">
+            <div class="card">
+                <header class="card-header">
+                    <a href="@Url.Action("Index","Users")" class="btn btn-outline-success float-right mt-1">Về danh sách</a>
+                    <h4 class="card-title mt-2 text-danger">Thùng rác</h4>
+                </header>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th>ID</th>
+                                <th>Họ</th>
+                                <th>Tên</th>
+                                <th>Hình đại diện</th>
+                                <th width="150px">Chức năng</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(m => item.Id)</td>
+                                <td>@Html.DisplayFor(m => item.LastName)</td>
+                                <td>@Html.DisplayFor(m => item.FirstName)</td>
+                                <td><img src="~/Public/Admin/images/@item.Avatar" class="img img-thumbnail" width="60" /></td>
+                                <td>
+                                    <a href="@Url.Action("Restore","Users", new { @id=item.Id})" class="btn btn-sm btn-success" onclick="return confirm('Bạn có muốn khôi phục tài khoản này không?');">Khôi phục</a>
+                                    <a href="@Url.Action("DeleteConfirmed","Users", new{ @id=item.Id})"  class="btn btn-sm btn-outline-danger" onclick=" return confirm('Bạn có muốn xóa tài khoản này không?');">Xóa</a>
+                                   
+
+                                </td>
+                            </tr>
+
+                        }
+
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

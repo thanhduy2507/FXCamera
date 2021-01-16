@@ -1,0 +1,22 @@
+﻿@using FXCamera.Models
+@if (TempData.ContainsKey("message"))
+{
+    var msg = (Message)TempData["message"];
+    <script src="~/Scripts/jquery-3.5.1.min.js"></script>
+    <script src="~/Public/js/notify.js"></script>
+    <script>$.notify("@(msg._message)","@msg._type");</script>
+
+    @*<div class="alert alert-@msg._type" role="alert" id="alert">
+        <span>@msg._message</span>
+    </div>*@
+}
+
+@*<script type="text/javascript">
+    window.setTimeout(function () {
+        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+
+            $(this).remove();
+        });
+    }, 2000);
+
+</script>*@

@@ -1,0 +1,38 @@
+﻿@model FXCamera.Models.Manufacturer
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Administrator/Views/Shared/AdminLayout.cshtml";
+}
+
+@using (Html.BeginForm("Create", "Manufacturers", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-6 text-danger">
+                        <h4>THÊM NHÀ SẢN XUẤT</h4>
+                    </div>
+                    <div class="col-6 text-right">
+                        <a href="@Url.Action("Index", "Manufacturers")" class="btn btn-danger">VỀ DANH SÁCH</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Tên nhà sản xuất</label>
+                    @Html.TextBox("Name",null, new { @class = "form-control col-7" , required="required"})
+                    
+                   
+
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success">Thêm mới</button>
+            </div>
+        </div>
+    </div>
+
+}
+

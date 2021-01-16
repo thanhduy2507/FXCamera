@@ -1,0 +1,23 @@
+﻿.ul.pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+ul.pagination li {
+    display: inline;
+    margin: 2px;
+    background-color: #62a2b8;
+    border-radius: 3px;
+}
+
+    ul.pagination li a {
+        color: white;
+        padding: 10px;
+        margin: 2px;
+        cursor: pointer;
+    }
+
+body{
+    font-size:14px;
+}

@@ -1,0 +1,35 @@
+﻿@model FXCamera.Models.Manufacturer
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Administrator/Views/Shared/AdminLayout.cshtml";
+}
+@using (Html.BeginForm("Edit", "Manufacturers", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-6 text-danger">
+                        <h4>SỬA THÔNG TIN NHÀ SẢN XUẤT</h4>
+                    </div>
+                    <div class="col-6 text-right">
+                        <a href="@Url.Action("Index", "Manufacturers")" class="btn btn-danger">VỀ DANH SÁCH</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Tên nhà sản xuất</label>
+                    @Html.TextBoxFor(m=>Model.Name, new { @class="form-control col-7"})
+                    @Html.ValidationMessageFor(m=>Model.Name,null, new { @class="text-danger"})
+
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+
+}

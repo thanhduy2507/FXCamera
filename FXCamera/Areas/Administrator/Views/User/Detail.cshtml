@@ -1,0 +1,149 @@
+﻿@model FXCamera.Models.User
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Areas/Administrator/Views/Shared/AdminLayout.cshtml";
+}
+@section header{
+
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+}
+
+@using (Html.BeginForm("Edit", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="container">
+
+        <div class="row justify-content-center mt-2">
+            <div class="col-12">
+                @Html.Partial("_Message")
+                <div class="card">
+                    <header class="card-header">
+
+                        <div class="row">
+                            <div class="col-3"><h4 class="card-title text-primary mt-2">THÔNG TIN TÀI KHOẢN</h4></div>
+                            <div class="col-9 text-right">
+                                <a href="@Url.Action("Index", "User")" class="btn btn-success">Về danh sách</a>
+                            </div>
+                        </div>
+                    </header>
+                    <article class="card-body">
+                        <span>@Html.ValidationSummary(true, "", new { @class = "text-danger" })</span>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    @Html.HiddenFor(m => Model.Id)
+                                    @Html.HiddenFor(m => Model.Password)
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Tài khoản</label>
+                                    @Html.TextBoxFor(m => Model.UserName, new { @class = "form-control", @readonly = "true" })
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-6">
+                                        <label class="control-label">Họ</label>
+                                        @Html.TextBoxFor(m => Model.LastName, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => Model.LastName, null, new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group col-6">
+                                        <label class="control-label">Tên</label>
+                                        @Html.TextBoxFor(m => Model.FirstName, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => Model.FirstName, null, new { @class = "text-danger" })
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Địa chỉ</label>
+                                    @Html.TextBoxFor(m => Model.Address, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.Address, null, new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Email</label>
+                                    @Html.TextBoxFor(m => Model.Email, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.Email, null, new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Số điện thoại</label>
+                                    @Html.TextBoxFor(m => Model.Phone, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.Phone, null, new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Ngày sinh</label>
+                                    <div class="form-group">
+                                        
+                                        @Html.TextBoxFor(m => Model.DateOfBirth, new
+                                        {
+                                            @class = "form-control",
+                                            @readonly = "true",
+                                            @Value=Model.DateOfBirth.ToShortDateString(),
+                                            @id = "datepicker"
+                                        })
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label mr-1">Giới tính:</label>
+                                    @Html.RadioButtonFor(m => Model.Gender, true)
+                                    <label class="form-check form-check-inline">Nam</label>
+                                    @Html.RadioButtonFor(m => Model.Gender, false)
+                                    <label class="form-check form-check-inline">Nữ</label>
+                                    @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label class="control-label">Mật khẩu:</label>
+                                    <br />
+                                    <a href="@Url.Action("ChangePassword","User", new { @id=Model.Id})" class="btn btn-danger">Đổi mật khẩu</a>
+
+                                </div>
+                                <div class="form-group">
+                                    <img src="~/Public/Images/@Model.Avatar" class="img img-thumbnail mt-3" width="300" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Thay đổi ảnh đại diện:</label>
+                                    <br />
+                                    <input type="file" name="Files" />
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Ngày tạo</label>
+                                    @Html.TextBoxFor(m => Model.Created_At, new { @class = "form-control", @readonly = "true" })   
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Trạng thái:</label>
+                                    <span class="text-@(Model.Status==true?"success":"danger")">@(Model.Status==true?"Kích hoạt":"Khóa")</span>
+                                </div>
+                                <hr />
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#datepicker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '-60:+60',
+            });
+        });
+
+    </script>
+}

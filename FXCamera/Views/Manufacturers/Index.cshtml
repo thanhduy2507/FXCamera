@@ -1,0 +1,49 @@
+﻿@model IEnumerable<FXCamera.Models.Manufacturer>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Administrator/Views/Shared/AdminLayout.cshtml";
+}
+
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <br />
+                <div class="col-6  text-danger">
+                    <h4>DANH MỤC HÃNG SẢN XUẤT</h4>
+                </div>
+                <div class="col-6 text-right">
+                    <a href="@Url.Action("Create","Manufacturers")" class="btn btn-success">THÊM HÃNG SẢN XUẤT</a>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th width="90">ID</th>
+                        <th>Tên nhà sản xuất</th>
+                        <th width="150">Chức năng</th>
+                    </tr>
+                </thead>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(m => item.Id)</td>
+                        <td>@Html.DisplayFor(m => item.Name)</td>
+                        <td>
+                            <a href="@Url.Action("Edit", "Manufacturers", new { @id = item.Id })" class="btn btn-sm btn-primary">Sửa</a>
+                            <a href="@Url.Action("Delete", "Manufacturers", new { @id = item.Id })" class="btn btn-sm btn-danger">Xóa</a>
+                        </td>
+                    </tr>
+
+                }
+            </table>
+        </div>
+    </div>
+</div>
+

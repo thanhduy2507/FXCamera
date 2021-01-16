@@ -1,0 +1,220 @@
+﻿@model FXCamera.Models.User
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Tạo tài khoản</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <style>
+        * {
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    @using (Html.BeginForm("SignUp", "Auth", FormMethod.Post, new { onsubmit = "return Validate()" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="container">
+
+            <div class="row justify-content-center pt-1 ">
+
+
+                <div class="col-md-6">
+                    @Html.Partial("_Message")
+                    <div class="card">
+                        <header class="card-header">
+                            <a href="@Url.Action("Login", "Auth")" class="btn btn-outline-primary float-right mt-1">Đăng nhập</a>
+                            <h4 class="card-title mt-2 text-primary">TẠO TÀI KHOẢN</h4>
+
+                        </header>
+                        <article class="card-body">
+
+
+                            <div class="form-group">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @Html.Label("Tên tài khoản", new { @class = "control-label" })
+
+                                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                                <span class="text-danger" id="userNameValidation"></span>
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Mật khẩu", new { @class = "control-label" })
+
+                                @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                                <span class="text-danger" id="passwordValidation"></span>
+                                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Nhập lại mật khẩu", new { @class = "control-label" })
+
+                                @Html.Password("ConfirmPassword", "", new { @class = "form-control" })
+                                <span class="text-danger" id="confirmPasswordValidation"></span>
+
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    @Html.Label("Họ", new { @class = "control-label" })
+
+                                    @Html.EditorFor(m => Model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                                    <span class="text-danger" id="lastNameValidation"></span>
+
+                                </div>
+                                <div class="form-group col-md-6">
+                                    @Html.Label("Tên", new { @class = "control-label" })
+
+                                    @Html.EditorFor(m => Model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                    <span class="text-danger" id="firstNameValidation"></span>
+                                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Email", new { @class = "control-label" })
+
+                                @Html.EditorFor(m => Model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(m => Model.Email, "", new { @class = "text-danger" })
+                                <span class="text-danger" id="emailValidation"></span>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label mr-1">Giới tính:</label>
+
+                                @Html.RadioButton("Gender", true, true)
+                                <label class="form-check form-check-inline">Nam</label>
+                                @Html.RadioButton("Gender", false)
+
+                                <label class="form-check form-check-inline">Nữ</label>
+                            </div>
+                            @*<div class="form-group">
+                                    @Html.Label("Ngày sinh","", new { @class = "control-label" })
+
+                                    @Html.TextBox("DateOfBirth", "", new
+                                   {
+
+                                       @class = "form-control",
+                                       @readonly = "true",
+                                       @Value = DateTime.Now.ToString("dd/MM/yyyy"),
+                                       @id = "datepicker"
+
+                                   })
+                                </div>*@
+                            <div class="form-group">
+                                @Html.EditorFor(m => Model.DateOfBirth, new { htmlAttributes = new { @class = "form-control" } })
+                                <span class="text-danger" id="birthdayValidation"></span>
+
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block">Đăng kí</button>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/Scripts/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+        function Validate() {
+
+            var username = document.getElementById("UserName");
+            var password = document.getElementById("Password");
+            var confirmPassword = document.getElementById("ConfirmPassword");
+            var lastname = document.getElementById("LastName");
+            var firstname = document.getElementById("FirstName");
+            var email = document.getElementById("Email");
+            var address = document.getElementById("Address");
+            var phone = document.getElementById("Phone");
+            var birthday = document.getElementById("DateOfBirth");
+            if (username.value == "") {
+                document.getElementById("userNameValidation").innerText = "Nhập vào tên đăng nhập";
+                username.focus();
+                return false;
+            }
+
+            else if (password.value == "") {
+                document.getElementById("passwordValidation").innerText = "Nhập vào mật khẩu";
+                password.focus();
+                return false;
+            }
+
+            else if (confirmPassword.value == "") {
+                document.getElementById("confirmPasswordValidation").innerText = "Nhập lại mật khẩu";
+                confirmPassword.focus();
+                return false;
+            }
+            else if (password.value != confirmPassword.value) {
+                document.getElementById("confirmPasswordValidation").innerText = "Nhập lại mật khẩu không chính xác";
+                confirmPassword.focus();
+                return false;
+            }
+
+            else if (lastname.value == "") {
+                document.getElementById("lastNameValidation").innerText = "Nhập vào họ";
+                lastname.focus();
+                return false;
+            }
+
+            else if (firstname.value == "") {
+                document.getElementById("firstNameValidation").innerText = "Nhập vào tên";
+                firstname.focus();
+                return false;
+            }
+
+            else if (email.value == "") {
+                document.getElementById("emailValidation").innerText = "Nhập vào email";
+                email.focus();
+                return false;
+            }
+            else if (birthday.value == "") {
+                document.getElementById("birthdayValidation").innerText = "Nhập vào ngày sinh";
+                return false;
+            }
+            else if (phone.value == "") {
+                document.getElementById("phoneValidation").innerText = "Nhập vào số điện thoại";
+                phone.focus();
+                return false;
+            }
+            else if (address.value == "") {
+                document.getElementById("addressValidation").innerText = "Nhập vào địa chỉ";
+                address.focus();
+                return false;
+            }
+
+            else {
+                return true;
+            }
+            return false;
+        }
+                //$(document).ready(function () {
+
+                //    $('#datepicker').datepicker({
+                //        changeMonth: true,
+                //        changeYear: true,
+                //        yearRange: '-60:+60'
+                //    });
+
+                //});
+    </script>
+</body>
+</html>

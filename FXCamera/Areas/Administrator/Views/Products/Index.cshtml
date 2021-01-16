@@ -1,0 +1,141 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model PagedList.IPagedList<FXCamera.Models.Product>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Administrator/Views/Shared/AdminLayout.cshtml";
+}
+
+
+<div class="container">
+    <div class="row justify-content-center pt-2">
+
+        <div class="col-md-12">
+            <div class="card">
+                <header class="card-header">
+                    <div class="row">
+                        <div class="col-3">
+                            <h4 class="card-title mt-3 text-primary">DANH SÁCH SẢN PHẨM </h4>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-inline justify-content-center mt-1 ml-1">
+
+                                @using (Html.BeginForm("Page", "Products", FormMethod.Get))
+                                {
+                                    @Html.TextBox("search", ViewBag.CurrentSearch as string, new { @class = "form-control mr-sm-2", @placeholder = "Nhập vào nội dung" })
+
+                                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Tìm kiếm</button>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <a href="@Url.Action("Create","Products")" class="btn btn-success float-right mt-1">Thêm mới</a>
+                        </div>
+                    </div>
+                </header>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th>@Html.ActionLink("ID", "Page", new { sort = ViewBag.Id, search = ViewBag.CurrentSearch})</th>
+                                <th>@Html.ActionLink("Tên sản phẩm", "Page", new { sort = ViewBag.Name, @search = ViewBag.CurrentSearch })</th>
+                                <th>Hình ảnh</th>
+                                <th>Thể loại</th>
+                                <th>Số lượng</th>
+                                <th>@Html.ActionLink("Giá", "Page", new { sort = ViewBag.Price, search = ViewBag.CurrentSearch })</th>
+                                <th>Giá giảm</th>
+                                <th width="180px">Chức năng</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in Model)
+                        {
+
+                            <tr id="row_@item.Id">
+                                <td>@item.Id</td>
+                                <td>@item.Name</td>
+                                <td><img src="~/Public/Images/@item.Images" class="img img-thumbnail" width="150" /></td>
+                                <td>@item.Category.Name</td>
+                                <td>@item.Number</td>
+                                <td>@item.Price.GetValueOrDefault(0).ToString("N0")</td>
+                                <td>@item.PriceSale.GetValueOrDefault(0).ToString("N0")</td>
+                                <td>
+                                    <a href="@Url.Action("Edit", "Products", new { @id = item.Id })" class="btn btn-sm btn-info">Sửa</a>
+
+                                    <a href="javascript:void(0)" class="btn btn-sm btn-@(item.Status==true? "success":"danger")" id="@item.Id" onclick=" return Status(@item.Id)" )>@((item.Status==true)? "ON":"OFF")</a>
+
+
+                                    <a href="javascript:void(0)" class="btn btn-sm btn-danger" id="@item.Id" onclick="Delete(@item.Id)">Xóa</a>
+                                </td>
+                            </tr>
+
+                        }
+                    </table>
+                    <div class="row pagination justify-content-center">
+                        @Html.PagedListPager(Model, i => Url.Action("Page", new { page = i, sort = ViewBag.CurrentSort, search = ViewBag.CurrentSearch }))
+                    </div>
+                    <div class="row justify-content-center text-info">Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section scripts{
+
+    <script type="text/javascript">
+        function Status(id) {
+            $.ajax({
+                url: '@Url.Action("Status","Products")',
+                data: JSON.stringify({ 'id': parseInt(id) }),
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                type: 'post',
+                success: function (response) {
+                    if (response.result) {
+                        $('#' + id).attr('class', 'btn btn-sm btn-success');
+                        $('#' + id).text('ON');
+                        $.notify('Thay đổi trạng thái thành công', 'success');
+                    }
+                    else {
+                        $('#' + id).attr('class', 'btn btn-sm btn-danger');
+                        $('#' + id).text('OFF');
+                        $.notify('Thay đổi trạng thái thành công', 'success');
+                    }
+                },
+                error: function (response) {
+                    $.notify('Thay đổi trạng thái thất bại', 'success');
+                }
+
+            });
+
+        }
+
+        function Delete(id) {
+            if (confirm("Bạn có muốn xóa không?")) {
+                $.ajax({
+                url: '@Url.Action("Delete","Products")',
+                data: JSON.stringify({ 'id': parseInt(id) }),
+                dataType: 'json',
+                type: 'Delete',
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                        if (response.result == true) {
+                            $('#row_' + id).remove();
+                            $.notify("Xóa sản phẩm thành công", "success");
+                        }
+                        else {
+                            $.notify("Xóa sản phẩm thất bại", "error");
+                        }
+                },
+                    error: function () {
+                        $.notify("Xóa sản phẩm thất bại", "error");
+                }
+            });
+            }
+
+        }
+
+    </script>
+
+}
+

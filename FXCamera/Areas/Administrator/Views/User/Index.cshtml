@@ -1,0 +1,133 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<FXCamera.Models.User>
+@{
+    ViewBag.Title = "Danh sách tài khoản";
+    Layout = "~/Areas/Administrator/Views/Shared/AdminLayout.cshtml";
+}
+@section header{
+
+}
+<div class="container">
+    <div class="row justify-content-center pt-2">
+
+        <div class="col-md-12">
+            @Html.Partial("_Message")
+            <div class="card">
+                <header class="card-header">
+                    <div class="row">
+                        <div class="col-3">
+                            <h4 class="card-title mt-3 text-primary">DANH SÁCH TÀI KHOẢN</h4>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-inline justify-content-center mt-1 ml-1">
+
+                                @using (Html.BeginForm("Page", "User", FormMethod.Get))
+                                {
+                                    @Html.TextBox("search", ViewBag.CurrentSearch as string, new { @class = "form-control mr-sm-2", @placeholder = "Nhập vào nội dung" })
+
+                                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Tìm kiếm</button>
+                                }
+
+
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <a href="@Url.Action("SignUp","Auth")" class="btn btn-outline-success float-right mt-1">Thêm mới</a>
+                        </div>
+                    </div>
+                </header>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th>@Html.ActionLink("ID", "Page", new { sort = ViewBag.Id, search = ViewBag.CurrentSearch })</th>
+                                <th>Tên đăng nhập</th>
+                                <th>@Html.ActionLink("Họ", "Page", new { sort = ViewBag.LastName, search = ViewBag.CurrentSearch })</th>
+                                <th>@Html.ActionLink("Tên", "Page", new { sort = ViewBag.FirstName, search = ViewBag.CurrentSearch })</th>
+                                <th width="180px">Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr id="row_@item.Id">
+                                    <td>@Html.DisplayFor(m => item.Id)</td>
+                                    <td>@Html.DisplayFor(m => item.UserName)</td>
+                                    <td>@Html.DisplayFor(m => item.LastName)</td>
+                                    <td>@Html.DisplayFor(m => item.FirstName)</td>
+                                    <td>
+                                        <a href="@Url.Action("Detail", "User", new { @id = item.Id })" class="btn btn-sm btn-info">Chi tiết</a>
+                                        <a href="javascript:void(0)" id="@item.Id" class="btn btn-sm btn-@(item.Status==true?"success":"default")" onclick="return Status(@item.Id)">@(item.Status==true?"ON":"OFF")</a>
+                                        <a href="javascript:void(0)" class="btn btn-sm btn-danger" onclick="return Delete(@item.Id)">Xóa</a>
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                    <div class="row pagination justify-content-center">
+                        @Html.PagedListPager(Model, i => Url.Action("Page", "User", new { page = i, sort = ViewBag.CurrentSort, search = ViewBag.CurrentSearch }))
+                    </div>
+                    <div class="row justify-content-center text-info">Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        function Status(id) {
+            $.ajax({
+                url: '@Url.Action("Status","User")',
+                data: JSON.stringify({ 'id': parseInt(id) }),
+                dataType: 'json',
+                type: 'post',
+                contentType: 'application/json;charset=utf-8',
+                success: function (response) {
+                    if (response.result == true) {
+                        $('#' + id).attr('class', 'btn btn-sm btn-success');
+                        $('#' + id).text('ON');
+                        $.notify('Cập nhật trạng thái thành công', 'success');
+                    }
+                    else {
+                        $('#' + id).attr('class', 'btn btn-sm btn-default');
+                        $('#' + id).text('OFF');
+                        $.notify('Cập nhật trạng thái thành công', 'success');
+                    }
+                },
+                error: function (response) {
+                    $.notify('Cập nhật trạng thái thất bại', 'error');
+                }
+
+            });
+        }
+        function Delete(id) {
+            if (confirm('Bạn có muốn xóa tài khoản này không?')) {
+                $.ajax({
+                    url: '@Url.Action("Delete","User")',
+                    data: JSON.stringify({ 'id': parseInt(id) }),
+                    dataType: 'json',
+                    contentType: 'application/json;charset=utf-8',
+                    type: 'delete',
+                    success: function (response) {
+                        if (response.result == true) {
+                            $('#row_' + id).remove();
+                            $.notify('Xoá tài khoản thành công!', 'success');
+                        }
+                        else {
+                            $.notify('Xoá tài khoản không thành công!', 'error');
+                        }
+                    },
+                    error: function (response) {
+                        $.notify('Xoá tài khoản không thành công!', 'error');
+                    }
+
+                });
+            }
+        }
+    </script>
+
+
+}
+

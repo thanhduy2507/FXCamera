@@ -1,0 +1,110 @@
+﻿@model FXCamera.Models.Product
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Administrator/Views/Shared/AdminLayout.cshtml";
+}
+
+@section header{
+
+
+
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+}
+@using (Html.BeginForm("Edit", "Products", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+
+        <div class="row justify-content-center mt-2">
+            <div class="col-12">
+                <div class="card">
+                    <header class="card-header">
+                        <div class="row">
+                            <div class="col-3"><h4 class="card-title text-primary mt-2">THAY ĐỔI THÔNG TIN SẢN PHẨM</h4></div>
+                            <div class="col-9 text-right">
+                                <a href="@Url.Action("Index", "Products")" class="btn btn-success">Về danh sách</a>
+                            </div>
+                        </div>
+                    </header>
+                    <article class="card-body">
+                        <span>@Html.ValidationSummary(true, "", new { @class = "text-danger" })</span>
+                        <div class="row">
+                            <div class="col-6">
+
+                                <div class="form-group">
+                                    <label class="control-label">Tên sản phẩm</label>
+                                    @Html.TextBoxFor(m => Model.Name, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.Name, null, new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Thể loại</label>
+                                    @Html.DropDownListFor(m => m.CategoryId, ViewBag.CategoriesID as SelectList, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.CategoryId, null, new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Nhà sản xuất", new { @class = "label-control" })
+
+                                    @Html.DropDownListFor(m => m.Manufacturer.Id, (SelectList)ViewBag.ManufacturerID, new { @class = "form-control", @id = "ManufacturerId", @Name = "ManufacturerId" })
+                                    @Html.ValidationMessageFor(m => Model.ManufacturerId, null, new { @class = "text-danger" })
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Hình ảnh</label>
+                                    <img src="~/Public/Images/@Model.Images" width="150" class="img img-thumbnail" />
+                                    <br />
+                                    <input type="file" name="File" />
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Chi tiết sản phẩm", new { @class = "control-label" })
+
+                                    @Html.TextAreaFor(m => m.Detail, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.Detail, null, new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                            <div class="col-6">
+
+                                <div class="form-group">
+                                    @Html.Label("Số lượng", new { @class = "control-label" })
+
+                                    @Html.TextBoxFor(m => m.Number, new { @min = "0", @step = "any", @type = "number", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.Number, null, new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.Label("Giá bán", new { @class = "control-label" })
+                                    @Html.TextBoxFor(m => m.Price, "{0:0}", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.Price, null, new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Giá khuyến mãi", new { @class = "control-label" })
+                                    @Html.TextBoxFor(m => m.PriceSale, "{0:0}", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.PriceSale, null, new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Mô tả SEO", new { @class = "control-label" })
+                                    @Html.TextAreaFor(m => m.MetaKey, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.MetaKey, null, new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Chi tiết mô tả", new { @class = "control-label" })
+                                    @Html.TextAreaFor(m => m.MetaDescription, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.MetaDescription, null, new { @class = "text-danger" })
+                                </div>
+                                <hr />
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+

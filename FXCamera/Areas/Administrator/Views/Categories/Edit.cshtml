@@ -1,0 +1,85 @@
+﻿@model FXCamera.Models.Category
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Administrator/Views/Shared/AdminLayout.cshtml";
+}
+
+@section header{
+
+
+
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+}
+@using (Html.BeginForm("Edit", "Categories", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+
+        <div class="row justify-content-center mt-2">
+            <div class="col-12">
+                <div class="card">
+                    <header class="card-header">
+                        <div class="row">
+                            <div class="col-3"><h4 class="card-title text-primary mt-2">THAY ĐỔI THÔNG TIN</h4></div>
+                            <div class="col-9 text-right">
+                                <a href="@Url.Action("Index", "Categories")" class="btn btn-success">Về danh sách</a>
+                            </div>
+                        </div>
+                    </header>
+                    <article class="card-body">
+                        <span>@Html.ValidationSummary(true, "", new { @class = "text-danger" })</span>
+                        <div class="row">
+                            <div class="col-6">
+
+                                <div class="form-group">
+                                    <label class="control-label">Tên danh mục</label>
+                                    @Html.TextBoxFor(m => Model.Name, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.Name, null, new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.Label("Mô tả", new { @class = "label-control" })
+
+                                    @Html.TextAreaFor(m => m.MetaKey, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.MetaKey, null, new { @class = "text-danger" })
+
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Chi tiết mô tả", new { @class = "label-control" })
+
+                                    @Html.TextAreaFor(m => m.MetaDescription, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.MetaDescription, null, new { @class = "text-danger" })
+
+                                </div>
+
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    @Html.Label("Danh mục cha", new { @class = "label-control" })
+
+                                    @Html.DropDownListFor(m => m.ParentId, (SelectList)ViewBag.ParentId, "[--None--]", new { @class = "form-control" })
+
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Thứ tự", new { @class = "label-control" })
+
+                                    @Html.TextBox("Orders", null, new { @class = "form-control" })
+
+
+                                </div>
+                                <hr />
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+}

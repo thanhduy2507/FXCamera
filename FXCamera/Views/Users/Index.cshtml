@@ -1,0 +1,79 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model PagedList.IPagedList<FXCamera.Models.User>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Administrator/Views/Shared/AdminLayout.cshtml";
+}
+@section header{
+    
+      } 
+<div class="container">
+    <div class="row justify-content-center pt-2">
+
+        <div class="col-md-12">
+            <div class="card">
+                <header class="card-header">
+                    <div class="row">
+                        <div class="col-3">
+                            <h4 class="card-title mt-3 text-primary">DANH SÁCH TÀI KHOẢN</h4>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-inline justify-content-center mt-1 ml-1">
+
+                                @using (Html.BeginForm("Page", "Users",FormMethod.Get))
+                                {
+                                    @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control mr-sm-2", @placeholder = "Nhập vào nội dung" })
+
+                                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Tìm kiếm</button>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <a href="@Url.Action("Trash","Users")" class="btn btn-outline-danger float-right mt-1 ml-1">Thùng rác</a>
+                            <a href="@Url.Action("Create","Users")" class="btn btn-outline-success float-right mt-1">Thêm mới</a>
+                        </div>
+                    </div>
+                </header>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th>@Html.ActionLink("ID", "Page", new { sortOrder = ViewBag.Id, @currentFilter = ViewBag.CurrentFilter })</th>
+                                <th>Hình đại diện</th>
+                                <th>@Html.ActionLink("Họ", "Page", new { sortOrder = ViewBag.LastName, @currentFilter = ViewBag.CurrentFilter })</th>
+                                <th>@Html.ActionLink("Tên", "Page", new { sortOrder = ViewBag.FirstName, @currentFilter = ViewBag.CurrentFilter })</th>
+                                <th width="120px">Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(m => item.Id)</td>
+                                    <td><img src="~/Public/Images/@item.Avatar" class="img img-thumbnail" width="80" /></td>
+                                    <td>@Html.DisplayFor(m => item.LastName)</td>
+                                    <td>@Html.DisplayFor(m => item.FirstName)</td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", "Users", new { @id = item.Id })" class="btn btn-sm btn-info">Sửa</a>
+
+                                        <a href="@Url.Action("Delete", "Users", new { @id = item.Id })" class="btn btn-sm btn-danger" onclick="return confirm('Xóa tài khoản vào thùng rác?');">Xóa</a>
+
+
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                    <div class="row pagination justify-content-center">
+                        @Html.PagedListPager(Model, i => Url.Action("Page", new { page = i, sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter }))
+                    </div>
+                    <div class="row justify-content-center text-info">Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
